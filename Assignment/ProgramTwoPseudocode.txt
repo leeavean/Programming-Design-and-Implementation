@@ -1,0 +1,129 @@
+BEGIN ProgramTwo
+
+METHOD: getData
+IMPORTS: fileStream (String)
+EXPORTS: teamName, teamCode, goalsScored, goalsConceded, group, and fileName
+ALGORITHM:
+        CREATE BufferedReader read with FileReader(fileStream ".csv")
+        String line
+        int lines = 0
+
+        WHILE line is NOT null
+            INCREMENT lines by 1
+            READ line from read
+        END WHILE 
+
+        CLOSE read
+        CREATE teams array of Team objects with size (lines - 1) // Skip header
+
+        int i = 0
+        WHILE line != null
+                SPLIT  line by ","
+                SET teamName to element 0 of data
+                SET teamCode to element 1 of data
+                SET goalsFor to PARSE INT of element 2 of data
+                SET goalsAgainst to PARSE INT of element 3 of data
+                SET group to first character of element 4 of data
+   
+            CREATE new Team object and store in teams[i]
+            INCREMENT i by 1
+        ENDWHILE
+
+        CLOSE read
+        PRINT "Data retrieved successfully."
+
+    CATCH IOException AS errorDetails
+        PRINT "Error while retrieving data from the file."    
+        PRINT errorDetails
+END 
+
+METHOD: dataAnalysis
+IMPORTS: 
+EXPORTS: teamName, teamCode, goalsScored, goalsConceded, group, and fileName
+ALGORITHM:
+    IF teams is null 
+        PRINT "No data to analyze. Please retrieve data first."
+    END IF
+
+    sc = new Scanner (System.in) 
+
+        REPEAT
+            OUTPUT "Choose one of the options below:"
+            OUTPUT "1. Overall Analysis"
+            OUTPUT "2. Group Analysis"
+            OUTPUT "3. Exit"
+            READ options from sc
+
+            SWITCH options
+                CASE 1:
+                    CALL AllTeamsAnalysis()
+                    BREAK
+                CASE 2:
+                    CALL GroupAnalysis(sc)
+                    BREAK
+                CASE 3:
+                    PRINT "Thank you and have a great day!"
+                    CLOSE sc
+                    RETURN
+                DEFAULT:
+                    PRINT "Invalid option. Please select an option from 1 to 3."
+            END SWITCH
+        UNTIL TRUE       
+END 
+
+METHOD: AllTeamsAnalysis
+IMPORTS: 
+EXPORTS: 
+ALGORITHM:
+        SORT teams in DESCENDING order by goalsScored 
+        PRINT "Teams sorted by descending order of total goals scored:"
+        FOR EACH team IN teams DO
+            OUTPUT team.teamName, ": ", team.goalsScored, " goals"
+        END FOR
+
+        SORT teams in DESCENDING order by goalsConceded 
+        PRINT "Teams sorted by descending order of total goals conceded:"
+        FOR EACH team IN teams DO
+            PRINT teamName, ": ", goalsConceded, " goals conceded"
+        END FOR
+
+        SORT teams by goal difference in DESCENDING order 
+        PRINT "Teams sorted by descending order of goal difference:"
+        FOR EACH team IN teams DO
+            PRINT teamName, ": ", (goalsScored - goalsConceded), " goal difference"
+        END FOR
+
+        PRINT "The best performing team is ", teams[0].teamName
+END 
+
+METHOD: GroupAnalysis
+IMPORTS: sc (Scanner) 
+EXPORTS: 
+ALGORITHM:
+    String selectedGroup <- INPUT "Enter the group (A/B/C/D) for group analysis: "
+    Filter teams for group
+    IF groupTeams.length = 0
+        PRINT "No data available for group", selectedGroup ,". Please select a different group."
+        RETURN to group selection
+    END IF
+        SORT teams in DESCENDING order by goalsScored 
+        PRINT "Teams in group", selectedGroup, " sorted by descending order of total goals scored:"
+        FOR EACH team IN groupTeams DO
+            PRINT teamName, ": ", team.goalsScored, " goals"
+        END FOR
+
+        SORT teams in DESCENDING order by goalsConceded 
+        PRINT "Teams in group", selectedGroup, " sorted by descending order of total goals conceded:"
+        FOR EACH team IN groupTeams DO
+            PRINT teamName, ": ", team.goalsConceded, " goals"
+        END FOR
+
+        SORT teams by goal difference in DESCENDING order 
+        PRINT "Teams in group", selectedGroup, " sorted by descending order of goal difference:"
+        FOR EACH team IN groupTeams DO
+            PRINT teamName, ": ", (goalsScored - goalsConceded), " goal difference"
+        END FOR
+
+        PRINT "The best performing team in group", selectedGroup, " is ", groupTeams[0].teamName    
+
+END 

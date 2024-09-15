@@ -1,0 +1,33 @@
+BEGIN MainProgram
+       Main:
+            CALL ProgramOne.dataInput()
+            sc <- new Scanner(System.in)
+            PRINT "Welcome toe the FIFA WWC Data Analysis Program"
+            String fileStream = "N/A"
+            boolean fileExists = false
+
+            WHILE !fileExists
+                PRINT "Enter the file name containing the data: "
+
+                IF fileStream isEmpty
+                    PRINT "File name cannot be empty. Please enter a valid file name."
+                ELSE IF !fileExists
+                    PRINT "File does not exist. Please enter a valid file name."
+                END IF
+            END WHILE    
+
+            CALL ProgramTwo.getData(fileStream)
+            CALL ProgramTwo.dataAnalysis()
+            CLOSE sc
+END MAIN            
+
+METHOD:fileExists
+IMPORT: fileStream
+EXPORT:
+OUTPUT:
+ALGORITHM:
+        File file <- new File(fileStream)
+        return file.exists() AND !file.isDirectory()
+END
+
+                                         

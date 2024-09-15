@@ -1,0 +1,142 @@
+BEGIN ProgramOne
+
+METHOD: dataInput
+IMPORTS: 
+EXPORTS: teamName, teamCode, goalsScored, goalsConceded, group, and fileName
+ALGORITHM:
+    PRINT "Welcome to the FIFA WWC Data Entry Program"
+    int numTeams = 0
+    WHILE numTeams <= 0 
+       numTeams <- PRINT "How many teams' data are you planning to enter? "
+       PRINT error message
+    ENDWHILE
+
+    Create ARRAY to store Team objects
+
+    FOR i = 0  TO numTeams
+       PRINT "Enter data for Team " numTeams ":"
+
+       Declare teamName (String), teamCode(String), goalsScored(int), goalsConceded(int), group(char)
+       CALL AskTeamName, AskTeamCode, AskGoalsScored, AskGoalsConceded, AskGroup (each variables respective methods)
+    END FOR
+
+    DISPLAY "the current data looks like this" teamName, teamCode, goalsScored, goalsConceded, group
+    
+    CALL AskFileName()
+            IF saveToFile(teams, fileName) THEN
+            PRINT "Data saved to ", fileName, ".csv"
+        ELSE
+            OUTPUT "Error while saving data to the file."
+        END IF
+        PRINT "Thank you and have a great day!"
+END 
+
+METHOD: saveToFile
+IMPORTS: teams (array of Team), fileStream (String)
+EXPORTS: 
+ALGORITHM:
+    TRY
+        CREATE PrintWriter pw for fileStream + ".csv"
+        WRITE "Team Name,Team Code,Goals For,Goals Against,Group" to pw
+        FOR EACH team IN teams DO
+            IF team is not null THEN
+                WRITE team.teamName, ",", team.teamCode, ",", team.goalsScored, ",", team.goalsConceded, ",", team.group to pw
+            END IF
+        END FOR
+        CLOSE pw
+        RETURN true
+    CATCH IOException AS errorDetails
+        PRINT errorDetails
+END
+  
+METHOD: AskTeamName
+IMPORTS: sc (Scanner)
+EXPORTS: error message with details
+ALGORITHM:
+    teamName = "N/A"
+    WHILE teamName isEmpty OR teamName is NOT String
+        teamName <- INPUT "Team Name:"
+        IF teamName isEmpty PRINT error message
+        ELSE IF teamName is NOT String PRINT error message
+        END IF
+    ENDWHILE    
+END
+
+METHOD: ValidTeamName
+IMPORTS: input (String)
+EXPORTS: 
+ALGORITHM:
+    IF teamName matches "^[a-zA-Z]+$"
+       return true 
+    ELSE return false
+    END IF   
+END
+
+METHOD: AskTeamCode
+IMPORTS: sc (Scanner)
+EXPORTS: error message with details
+ALGORITHM:
+    teamCode = "N/A"
+    WHILE teamCode isEmpty OR teamCode is NOT String
+        teamCode <- INPUT "Team code:"
+        IF teamCode isEmpty PRINT error message
+        ELSE IF teamCode is NOT String PRINT error message
+        END IF
+    ENDWHILE    
+END
+
+METHOD: ValidTeamCode
+IMPORTS: input (String)
+EXPORTS: 
+ALGORITHM:
+    IF teamCode matches "^[A-Z]+$"
+       return true 
+    ELSE return false
+    END IF 
+END
+
+METHOD: AskGoalsScored
+IMPORTS: sc (Scanner)
+EXPORTS: error message for invalid integer
+ALGORITHM:
+    int goalsScored = 0
+    WHILE goalsScored is NOT integer
+        PRINT "Please enter a positive integer for goals scored."
+        goalsScored <- INPUT "Goals Scored: "
+        IF goalsScored < 0  PRINT error message
+    END IF
+    END WHILE    
+END
+
+METHOD: AskGoalsConceded
+IMPORTS: sc (Scanner)
+EXPORTS: error message for invalid integer
+ALGORITHM:
+    int goalsScored = 0
+    WHILE goalsConceded is NOT integer
+        PRINT "Please enter a positive integer for goals conceded."
+        goalsScored <- INPUT "Goals conceded: "
+        IF goalsConceded < 0  PRINT error message
+    END IF
+    END WHILE    
+END
+
+METHOD: AskGroup
+IMPORTS: sc (Scanner)
+EXPORTS: error message if group letter is invalid
+ALGORITHM:
+    char group = 'A'
+    WHILE group != 'A' AND group != 'B' AND group != 'C' AND group != 'D'
+        group <- INPUT "Enter group (A/B/C/D)"
+        IF grouplength != 1 AND group != 'A' AND group != 'B' AND group != 'C' AND group != 'D'
+        PRINT error message
+    END IF
+    END WHILE    
+END
+
+METHOD: AskFileName
+IMPORTS: sc (Scanner)
+EXPORTS: 
+ALGORITHM:
+    fileStream <- INPUT "What would you like to name your csv file? "
+END

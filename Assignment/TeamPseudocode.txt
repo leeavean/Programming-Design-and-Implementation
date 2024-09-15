@@ -1,0 +1,124 @@
+BEGIN Team
+    Declare FIELDS:
+        public String teamName
+        public String teamCode
+        public int goalsScored
+        public int goalsConceded
+        public char group
+
+METHOD: Team
+IMPORT:
+EXPORT:
+OUTPUT:
+ALGORITHM:
+        teamName = ""
+        teamCode = ""
+        goalsScored = 0
+        goalsConceded = 0
+        group = 'A'
+END
+
+METHOD: Team
+IMPORT: aTeamName (String), aTeamCode (String), aGoalsConceded (integer), aGoalsScored (integer), aGroup(char)
+EXPORT:
+OUTPUT:
+ALGORITHM:
+        teamName = aTeamName
+        teamCode = aTeamCode
+        goalsScored = aGoalsScored
+        goalsConceded = aGoalsConceded
+        group = aGroup
+END
+
+METHOD: Team
+IMPORT: otherTeam (Team)
+EXPORT:
+OUTPUT:
+ALGORITHM:
+        teamName = otherTeam.teamName
+        teamCode = otherTeam.teamCode
+        goalsScored = otherTeam.goalsScored
+        goalsConceded = otherTeam.goalsConceded
+        group = otherTeam.group
+END
+
+METHOD: getTeamName
+IMPORT:
+EXPORT: teamName (String)
+OUTPUT:
+ALGORITHM:
+        return teamName 
+END
+
+METHOD: getTeamCode
+IMPORT:
+EXPORT: teamCode (String)
+OUTPUT:
+ALGORITHM:
+        return teamCode 
+END
+
+METHOD: getGoalsScored
+IMPORT:
+EXPORT: goalsScored (integer)
+OUTPUT:
+ALGORITHM:
+        return goalsScored
+END
+
+METHOD: getGoalsConceded
+IMPORT:
+EXPORT: goalsConceded (integer)
+OUTPUT:
+ALGORITHM:
+        return goalsConceded
+END
+
+METHOD: getGroup
+IMPORT:
+EXPORT: group (char)
+OUTPUT:
+ALGORITHM:
+        return group
+END
+
+METHOD: setTeamName
+IMPORT: aTeamName (String)
+EXPORT:
+OUTPUT:
+ALGORITHM:
+        teamName = aTeamName
+END
+
+METHOD: setTeamCode
+IMPORT: aTeamCode (String)
+EXPORT:
+OUTPUT:
+ALGORITHM:
+        teamCode = aTeamCode
+END
+
+METHOD: setGoalsScored
+IMPORT: aGoalsScored (integer)
+EXPORT:
+OUTPUT:
+ALGORITHM:
+        goalsScored = aGoalsScored
+END
+
+METHOD: setGoalsConceded
+IMPORT: aGoalsConceded (integer)
+EXPORT:
+OUTPUT:
+ALGORITHM:
+        goalsConceded = aGoalsConceded
+END
+
+METHOD: setGroup
+IMPORT: aGroup (char)
+EXPORT:
+OUTPUT:
+ALGORITHM:
+        group = aGroup
+END
+    
